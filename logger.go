@@ -9,7 +9,7 @@ var log *logger
 
 type logger struct {
 	*zap.Logger
-	handlers map[string]Handler
+	handlers map[string]*Handler
 }
 
 func (log *logger) build() {
@@ -20,7 +20,7 @@ func (log *logger) build() {
 	log.Logger = zap.New(zapcore.NewTee(cores...))
 }
 
-func RegisterHandler(name string, h Handler) {
+func RegisterHandler(name string, h *Handler) {
 	if h.core == nil {
 		return
 	}
@@ -28,7 +28,7 @@ func RegisterHandler(name string, h Handler) {
 		log = &logger{}
 	}
 	if log.handlers == nil {
-		log.handlers = map[string]Handler{}
+		log.handlers = map[string]*Handler{}
 	}
 	log.handlers[name] = h
 	log.build()

@@ -47,7 +47,7 @@ type HandlerEncoders struct {
 	Name     zapcore.NameEncoder // optional
 }
 
-func NewHandler(c HandlerConfig) Handler {
+func NewHandler(c HandlerConfig) *Handler {
 	if c.Writer == nil {
 		panic("writer cannot be nil")
 	}
@@ -100,7 +100,7 @@ func NewHandler(c HandlerConfig) Handler {
 		writer = zapcore.Lock(zapcore.AddSync(c.Writer))
 	}
 
-	return Handler{
+	return &Handler{
 		core: zapcore.NewCore(encoder, writer, c.Enabler),
 	}
 }
