@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"net/smtp"
+	"sync"
 
 	"github.com/a-was/log"
 	"github.com/jordan-wright/email"
@@ -35,10 +37,11 @@ func SMTPHandler(c SMTPConfig) *log.Handler {
 type smtpWriter struct {
 	SMTPConfig
 	email email.Email
+	mu    sync.Mutex
 }
 
-func newSMTPWriter(c SMTPConfig) smtpWriter {
-	return smtpWriter{
+func newSMTPWriter(c SMTPConfig) *smtpWriter {
+	return &smtpWriter{
 		SMTPConfig: c,
 		email: email.Email{
 			From:    c.From,
@@ -48,12 +51,16 @@ func newSMTPWriter(c SMTPConfig) smtpWriter {
 	}
 }
 
-func (w smtpWriter) Write(p []byte) (int, error) {
-	email := w.email
-	email.Text = p
-	email.HTML = p
-	if err := email.Send(w.Server, w.Auth); err != nil {
-		return 0, err
-	}
+func (w *smtpWriter) Write(p []byte) (int, error) {
+	go func(w *smtpWriter) {
+		w.mu.Lock()
+		defer w.mu.Unlock()
+		email := w.email
+		email.Text = p
+		email.HTML = p
+		if err := email.Send(w.Server, w.Auth); err != nil {
+			fmt.Println("SMTP handler error:", err.Error())
+		}
+	}(w)
 	return len(p), nil
 }
