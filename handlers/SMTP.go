@@ -24,7 +24,7 @@ func SMTPHandler(c SMTPConfig) *log.Handler {
 	return log.NewHandler(log.HandlerConfig{
 		Type:         log.HandlerTypeText,
 		Writer:       newSMTPWriter(c),
-		WriterSynced: false,
+		WriterSynced: true,
 		Encoders: log.HandlerEncoders{
 			Time: zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.999"),
 		},
