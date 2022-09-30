@@ -22,8 +22,15 @@ type SMTPConfig struct {
 
 func SMTPHandler(c SMTPConfig) *log.Handler {
 	return log.NewHandler(log.HandlerConfig{
-		Type:         log.HandlerTypeText,
-		Writer:       newSMTPWriter(c),
+		Type: log.HandlerTypeText,
+		Writer: &smtpWriter{
+			SMTPConfig: c,
+			email: email.Email{
+				From:    c.From,
+				To:      c.To,
+				Subject: c.Subject,
+			},
+		},
 		WriterSynced: true,
 		Encoders: log.HandlerEncoders{
 			Time: zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.999"),
@@ -38,17 +45,6 @@ type smtpWriter struct {
 	SMTPConfig
 	email email.Email
 	mu    sync.Mutex
-}
-
-func newSMTPWriter(c SMTPConfig) *smtpWriter {
-	return &smtpWriter{
-		SMTPConfig: c,
-		email: email.Email{
-			From:    c.From,
-			To:      c.To,
-			Subject: c.Subject,
-		},
-	}
 }
 
 func (w *smtpWriter) Write(p []byte) (int, error) {
