@@ -16,11 +16,16 @@ type SMTPConfig struct {
 	To      []string
 	Subject string
 
-	Server string
+	Server string // host:port
 	Auth   smtp.Auth
+
+	Enabler zapcore.LevelEnabler
 }
 
 func SMTPHandler(c SMTPConfig) *log.Handler {
+	if c.Enabler == nil {
+		c.Enabler = zap.ErrorLevel
+	}
 	return log.NewHandler(log.HandlerConfig{
 		Type: log.HandlerTypeText,
 		Writer: &smtpWriter{
@@ -35,9 +40,7 @@ func SMTPHandler(c SMTPConfig) *log.Handler {
 		Encoders: log.HandlerEncoders{
 			Time: zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.999"),
 		},
-		Enabler: zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-			return lvl >= zapcore.ErrorLevel
-		}),
+		Enabler: c.Enabler,
 	})
 }
 
