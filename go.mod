@@ -1,4 +1,4 @@
-module github.com/a-was/log
+module github.com/a-was/go-log
 
 go 1.18
 

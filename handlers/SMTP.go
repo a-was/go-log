@@ -5,7 +5,7 @@ import (
 	"net/smtp"
 	"sync"
 
-	"github.com/a-was/log"
+	"github.com/a-was/go-log"
 	"github.com/jordan-wright/email"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

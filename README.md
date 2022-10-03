@@ -9,7 +9,7 @@ You can use default console handler and default log file handler
 ```go
 package main
 
-import "github.com/a-was/log"
+import log "github.com/a-was/go-log"
 
 func main() {
 	log.UseDefaultConsoleHandler()
