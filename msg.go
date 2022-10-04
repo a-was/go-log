@@ -15,7 +15,7 @@ func formatArgs(args []any) string {
 	for i, v := range args {
 		sb.WriteString(fmt.Sprintf("%+v", v))
 		if len(args)-1 > i {
-			sb.WriteString(" ")
+			sb.WriteByte(' ')
 		}
 	}
 	return sb.String()
