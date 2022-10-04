@@ -10,6 +10,7 @@ var log *logger
 type logger struct {
 	*zap.SugaredLogger
 	handlers map[string]*Handler
+	options  []zap.Option
 }
 
 func (log *logger) build() {
@@ -17,7 +18,7 @@ func (log *logger) build() {
 	for _, v := range log.handlers {
 		cores = append(cores, v.core)
 	}
-	log.SugaredLogger = zap.New(zapcore.NewTee(cores...)).Sugar()
+	log.SugaredLogger = zap.New(zapcore.NewTee(cores...), log.options...).Sugar()
 }
 
 func RegisterHandler(name string, h *Handler) {
@@ -43,6 +44,7 @@ func UnregisterHandler(name string) {
 }
 
 func UseOptions(opts ...zap.Option) {
+	log.options = append(log.options, opts...)
 	log.SugaredLogger = log.WithOptions(opts...)
 }
 
