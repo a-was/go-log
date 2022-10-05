@@ -55,3 +55,7 @@ func WithCaller() {
 func WithStacktrace() {
 	UseOptions(zap.AddStacktrace(zap.ErrorLevel))
 }
+
+func DevelopmentMode() {
+	UseOptions(zap.Development())
+}

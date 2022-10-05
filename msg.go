@@ -35,6 +35,8 @@ func Log(level zapcore.Level, v []any) {
 		log.Warn(args)
 	case zap.ErrorLevel:
 		log.Error(args)
+	case zap.DPanicLevel:
+		log.DPanic(args)
 	case zap.PanicLevel:
 		log.Panic(args)
 	case zap.FatalLevel:
@@ -55,6 +57,8 @@ func Logf(level zapcore.Level, format string, v []any) {
 		log.Warnf(format, v...)
 	case zap.ErrorLevel:
 		log.Errorf(format, v...)
+	case zap.DPanicLevel:
+		log.DPanicf(format, v...)
 	case zap.PanicLevel:
 		log.Panicf(format, v...)
 	case zap.FatalLevel:
@@ -79,6 +83,8 @@ func Logw(level zapcore.Level, msg string, vars V) {
 		log.Warnw(msg, args...)
 	case zap.ErrorLevel:
 		log.Errorw(msg, args...)
+	case zap.DPanicLevel:
+		log.DPanicw(msg, args...)
 	case zap.PanicLevel:
 		log.Panicw(msg, args...)
 	case zap.FatalLevel:
@@ -140,6 +146,20 @@ func Errorf(format string, v ...any) {
 
 func Errorw(msg string, vars V) {
 	Logw(zap.ErrorLevel, msg, vars)
+}
+
+// DPANIC
+
+func DPanic(v ...any) {
+	Log(zap.DPanicLevel, v)
+}
+
+func DPanicf(format string, v ...any) {
+	Logf(zap.DPanicLevel, format, v)
+}
+
+func DPanicw(msg string, vars V) {
+	Logw(zap.DPanicLevel, msg, vars)
 }
 
 // PANIC
