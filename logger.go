@@ -53,7 +53,7 @@ func UseOptions(opts ...zap.Option) {
 // WithCaller configures the logger to annotate each message with the filename,
 // line number, and function name (it needs to be enabled by setting function key).
 func WithCaller() {
-	UseOptions(zap.AddCaller(), zap.AddCallerSkip(1))
+	UseOptions(zap.AddCaller(), zap.AddCallerSkip(2))
 }
 
 // WithStacktrace configures the logger to record a stack trace for all messages at
