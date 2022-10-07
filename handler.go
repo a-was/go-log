@@ -18,33 +18,48 @@ const (
 )
 
 type HandlerConfig struct {
-	Type         HandlerType
-	Writer       io.Writer
+	// Type allows to choose how messages should be encoded.
+	//
+	// Default: HandlerTypeText
+	Type HandlerType
+	// Writer defines where to write messages.
+	Writer io.Writer
+	// WriterSynced defines if writer is already synced.
+	// If false, it is wrapped with mutex to make it safe for concurrent use.
+	// *os.Files must have this set to false.
 	WriterSynced bool
 
-	Keys             HandlerKeys
-	Encoders         HandlerEncoders
+	// Define how to name logger keys.
+	// Empty string is treated as default value.
+	// If You want to diable some key, set its value to "-".
+	Keys HandlerKeys
+	// Define how to encode logger fields.
+	// nil value falls back to default value.
+	// if You want to disable some encoder, You have to disable its key.
+	Encoders HandlerEncoders
+	// ConsoleSeparator between line elements. Default " : " (TIME : LEVEL : MESSAGE).
 	ConsoleSeparator string
 
+	// When to log message. Most of the times it simply will be log level. Default to info level.
 	Enabler zapcore.LevelEnabler
 }
 
 type HandlerKeys struct {
-	Time       string
-	Level      string
-	Name       string
-	Caller     string
-	Function   string
-	Message    string
-	Stacktrace string
+	Time       string // Default: time
+	Level      string // Default: level
+	Name       string // Default: logger
+	Caller     string // Default: caller
+	Function   string // Default: - (disabled)
+	Message    string // Default: message
+	Stacktrace string // Default: stacktrace
 }
 
 type HandlerEncoders struct {
-	Level    zapcore.LevelEncoder
-	Time     zapcore.TimeEncoder
-	Duration zapcore.DurationEncoder
-	Caller   zapcore.CallerEncoder
-	Name     zapcore.NameEncoder // optional
+	Level    zapcore.LevelEncoder    // Default: zapcore.CapitalLevelEncoder
+	Time     zapcore.TimeEncoder     // Default: zapcore.ISO8601TimeEncoder
+	Duration zapcore.DurationEncoder // Default: zapcore.StringDurationEncoder
+	Caller   zapcore.CallerEncoder   // Default: zapcore.ShortCallerEncoder
+	Name     zapcore.NameEncoder     // Optional
 }
 
 func NewHandler(c HandlerConfig) *Handler {

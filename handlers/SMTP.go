@@ -12,7 +12,7 @@ import (
 )
 
 type SMTPConfig struct {
-	From    string
+	From    string // "Sender <sender@example.com>"
 	To      []string
 	Subject string
 
