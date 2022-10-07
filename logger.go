@@ -46,6 +46,10 @@ func UnregisterHandler(name string) {
 }
 
 func UseOptions(opts ...zap.Option) {
+	if log == nil {
+		log = &logger{}
+		log.build()
+	}
 	log.options = append(log.options, opts...)
 	log.SugaredLogger = log.WithOptions(opts...)
 }
