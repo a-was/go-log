@@ -142,11 +142,11 @@ func (k *HandlerKeys) defaults() {
 		k.Name = ""
 	}
 
-	switch k.Message {
+	switch k.Caller {
 	case "":
-		k.Message = "message"
+		k.Caller = "caller"
 	case "-":
-		k.Message = ""
+		k.Caller = ""
 	}
 
 	switch k.Function {
@@ -154,11 +154,11 @@ func (k *HandlerKeys) defaults() {
 		k.Function = ""
 	}
 
-	switch k.Caller {
+	switch k.Message {
 	case "":
-		k.Caller = "caller"
+		k.Message = "message"
 	case "-":
-		k.Caller = ""
+		k.Message = ""
 	}
 
 	switch k.Stacktrace {
